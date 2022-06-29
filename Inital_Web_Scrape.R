@@ -1,6 +1,6 @@
 library(purrr)
 library(httr)
-
+library(jsonlite)
 
 # 
 # 
@@ -144,6 +144,9 @@ library(httr)
 #                "Windwalker Monk", "Mistweaver Monk", "Blood Death Knight","Unholy Death Knight", "Frost Death Knight",
 #                "Havoc Demon Hunter", "Vengeance Demon Hunter", "Affliction Warlock", "Demonology Warlock", "Destruction Warlock")
 
+possible_get = possibly(.f = httr::GET, otherwise = 'ERROR')
+possible_json = possibly(.f = jsonlite::fromJSON, otherwise = 'ERROR' )
+
 bracket = c("2v2","3v3","rbg")
 start.time = Sys.time()
 
@@ -163,7 +166,7 @@ season_get$status_code
 
 season = rawToChar(season_get$content)
 
-season = jsonlite::fromJSON(season, flatten = TRUE)
+season = possible_json(season, flatten = TRUE)
 current_season = season$current_season$id
 
 for(n in 1:3){
@@ -178,7 +181,7 @@ for(n in 1:3){
   
   standings = rawToChar(standings_get$content)
   
-  standings = jsonlite::fromJSON(standings, flatten = TRUE)
+  standings = possible_json(standings, flatten = TRUE)
   standings = data.frame(standings$entries)
   
   factions = standings$faction.type
@@ -203,12 +206,16 @@ for(n in 1:3){
                           Spec.Class = NA,
                           Char.Name = NA)
   
-  for(j in 1:100){
+  for(j in 1:2000){
     get_talents_url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/",player_realm[j],"/",top_players[j],"/specializations?namespace=profile-us&locale=en_US&access_token=",access_token))
     get_class_url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/",player_realm[j],"/",top_players[j],"?namespace=profile-us&locale=en_US&access_token=",access_token))
     
-    talents_get = httr::GET(get_talents_url)
-    class_get = httr::GET(get_class_url)
+    talents_get = possible_get(get_talents_url)
+    class_get = possible_get(get_class_url)
+    
+    if(talents_get != 'ERROR' & class_get != 'ERROR'){
+      
+    
     
     talents_get$status_code
     class_get$status_code
@@ -221,8 +228,12 @@ for(n in 1:3){
     class = rawToChar(class_get$content)
     
     
-    class = jsonlite::fromJSON(class, flatten = TRUE)
-    talents = jsonlite::fromJSON(talents, flatten = TRUE)
+    class = possible_json(class, flatten = TRUE)
+    talents = possible_json(talents, flatten = TRUE)
+    
+    if(class == 'ERROR' | talents == 'ERROR'){
+      next()
+    }
     
     class = class$character_class$name
     spec = talents$active_specialization$name
@@ -248,6 +259,10 @@ for(n in 1:3){
       )
       
       talents_df = rbind(talents_df, x)
+    }
+    }else{
+      print('ERROR FOUND')
+      next()
     }
   }
   talents_df = talents_df[-1,]

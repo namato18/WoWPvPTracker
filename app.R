@@ -151,7 +151,7 @@ server <- function(input, output) {
       
       plot = ggplot(indi_df, aes(x = Talent.Level, fill = Talent)) + geom_bar(stat = "count",position = "dodge", alpha = 0.5) +
         geom_text(stat = "count", aes(label = Talent, angle = "90"), position = position_dodge(width = 5), vjust = 0.4, hjust = -0.2, size = 3.5) +
-        ylim(0,maxcount) +
+        #ylim(0,maxcount) +
         xlab("Talent Level") +
         ylab("Count") +
         ggtitle(label = paste0(indi_df$Spec[1]," ",indi_df$Class[1]," Talents ",bracket)) +
@@ -360,7 +360,7 @@ server <- function(input, output) {
       ggtitle(label = paste0("Class and Spec of top 1000 ",input$variable," Players"), subtitle = current_date) +
       xlab(label = "Class") +
       ylab(label = "Count") +
-      ylim(0,175) +
+      #ylim(0,175) +
       theme(axis.text.x = element_text(angle = 90, size = 11))
     
     piechart = ggplot(pie_df, aes(x = "", y = Freq, fill = factions)) + geom_bar(stat = "identity") +
