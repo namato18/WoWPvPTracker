@@ -1,35 +1,36 @@
-"spec","class","count"
-"Survival","Hunter",72
-"Holy","Priest",177
-"Assassination","Rogue",30
-"Subtlety","Rogue",75
-"Feral","Druid",41
-"Enhancement","Shaman",11
-"Outlaw","Rogue",10
-"Restoration","Druid",68
-"Demonology","Warlock",23
-"Havoc","Demon Hunter",56
-"Windwalker","Monk",40
-"Restoration","Shaman",29
-"Fire","Mage",31
-"Arms","Warrior",28
-"Holy","Paladin",43
-"Discipline","Priest",31
-"Shadow","Priest",28
-"Marksmanship","Hunter",18
-"Balance","Druid",5
-"Fury","Warrior",24
-"Beast Mastery","Hunter",49
-"Mistweaver","Monk",19
-"Affliction","Warlock",20
-"Retribution","Paladin",9
-"Destruction","Warlock",18
-"Unholy","Death Knight",8
-"Protection","Paladin",3
-"Frost","Mage",5
-"Guardian","Druid",4
-"Elemental","Shaman",16
-"Arcane","Mage",2
-"Frost","Death Knight",4
-"Brewmaster","Monk",2
-"Blood","Death Knight",1
+"Var1","Freq","spec","class"
+"Affliction.Warlock",15,"Affliction","Warlock"
+"Arcane.Mage",5,"Arcane","Mage"
+"Arms.Warrior",36,"Arms","Warrior"
+"Assassination.Rogue",46,"Assassination","Rogue"
+"Balance.Druid",17,"Balance","Druid"
+"Beast Mastery.Hunter",62,"Beast Mastery","Hunter"
+"Brewmaster.Monk",1,"Brewmaster","Monk"
+"Demonology.Warlock",61,"Demonology","Warlock"
+"Destruction.Warlock",21,"Destruction","Warlock"
+"Discipline.Priest",88,"Discipline","Priest"
+"Elemental.Shaman",28,"Elemental","Shaman"
+"Enhancement.Shaman",13,"Enhancement","Shaman"
+"Feral.Druid",65,"Feral","Druid"
+"Fire.Mage",66,"Fire","Mage"
+"Frost.Death Knight",4,"Frost","Death Knight"
+"Frost.Mage",5,"Frost","Mage"
+"Fury.Warrior",86,"Fury","Warrior"
+"Guardian.Druid",2,"Guardian","Druid"
+"Havoc.Demon Hunter",79,"Havoc","Demon Hunter"
+"Holy.Paladin",76,"Holy","Paladin"
+"Holy.Priest",356,"Holy","Priest"
+"Marksmanship.Hunter",28,"Marksmanship","Hunter"
+"Mistweaver.Monk",37,"Mistweaver","Monk"
+"Outlaw.Rogue",87,"Outlaw","Rogue"
+"Protection.Paladin",13,"Protection","Paladin"
+"Protection.Warrior",2,"Protection","Warrior"
+"Restoration.Druid",151,"Restoration","Druid"
+"Restoration.Shaman",69,"Restoration","Shaman"
+"Retribution.Paladin",32,"Retribution","Paladin"
+"Shadow.Priest",48,"Shadow","Priest"
+"Subtlety.Rogue",125,"Subtlety","Rogue"
+"Survival.Hunter",112,"Survival","Hunter"
+"Unholy.Death Knight",42,"Unholy","Death Knight"
+"Vengeance.Demon Hunter",2,"Vengeance","Demon Hunter"
+"Windwalker.Monk",59,"Windwalker","Monk"
