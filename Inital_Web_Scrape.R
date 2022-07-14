@@ -206,7 +206,7 @@ for(n in 1:3){
                           Spec.Class = NA,
                           Char.Name = NA)
   
-  for(j in 1:2000){
+  for(j in 1:length(top_players)){
     get_talents_url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/",player_realm[j],"/",top_players[j],"/specializations?namespace=profile-us&locale=en_US&access_token=",access_token))
     get_class_url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/",player_realm[j],"/",top_players[j],"?namespace=profile-us&locale=en_US&access_token=",access_token))
     
