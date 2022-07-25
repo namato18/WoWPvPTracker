@@ -193,8 +193,8 @@ for(n in 1:3){
   
   
   
-  assign(paste0("top_players_",bracket[n]), top_players, .GlobalEnv)
-  assign(paste0("player_realm",bracket[n]), player_realm, .GlobalEnv)
+  assign(paste0("top_players_",bracket[3]), top_players, .GlobalEnv)
+  assign(paste0("player_realm",bracket[3]), player_realm, .GlobalEnv)
   
   spec_vec = c()
   class_vec = c()
@@ -205,6 +205,12 @@ for(n in 1:3){
                           Talent.Level = NA,
                           Spec.Class = NA,
                           Char.Name = NA)
+  
+  pvp_talents_df = data.frame(Class = NA,
+                              Spec = NA,
+                              PvP.Talent = NA,
+                              Spec.Class = NA,
+                              Char.Name = NA)
   
   for(j in 1:length(top_players)){
     get_talents_url = URLencode(paste0("https://us.api.blizzard.com/profile/wow/character/",player_realm[j],"/",top_players[j],"/specializations?namespace=profile-us&locale=en_US&access_token=",access_token))
@@ -229,18 +235,21 @@ for(n in 1:3){
     
     
     class = possible_json(class, flatten = TRUE)
-    talents = possible_json(talents, flatten = TRUE)
+    talents_ = possible_json(talents, flatten = TRUE)
     
     if(class == 'ERROR' | talents == 'ERROR'){
       next()
     }
     
     class = class$character_class$name
-    spec = talents$active_specialization$name
-    talents = talents$specializations$talents[[which(talents$specializations$specialization.name == spec)]]$talent.name
+    spec = talents_$active_specialization$name
+    selected_index = which(talents_$specializations$specialization.name == spec)
+    talents = talents_$specializations$talents[[selected_index]]$talent.name
+    pvp_talents = talents_$specializations$pvp_talent_slots[[selected_index]]$selected.talent.name
     print(talents)
+    print(pvp_talents)
     print(j)
-    if(length(talents) != 7){
+    if(length(talents) != 7 | length(pvp_talents) != 31){
       print('FOUND IT')
       next()
     }
@@ -260,12 +269,22 @@ for(n in 1:3){
       
       talents_df = rbind(talents_df, x)
     }
+    
+    for(k in 1:length(pvp_talents)){
+      x = data.frame(Class = class,
+                     Spec = spec,
+                     PvP.Talent = pvp_talents[k],
+                     Spec.Class = paste0(spec,".",class),
+                     Char.Name = top_players[j])
+      pvp_talents_df = rbind(pvp_talents_df, x)
+    }
     }else{
       print('ERROR FOUND')
       next()
     }
   }
   talents_df = talents_df[-1,]
+  pvp_talents_df = pvp_talents_df[-1,]
   talents_df$Talent.Level = rep(c(15,25,30,35,40,45,50), nrow(talents_df)/7)
   
   class_spec_df = data.frame(cbind(class_vec,spec_vec))
@@ -279,9 +298,11 @@ for(n in 1:3){
   write.csv(factions, paste0("pie_df_",bracket[n],".csv"), row.names = FALSE)
   write.csv(talents_df, paste0("talents_df_",bracket[n],".csv"), row.names = FALSE)
   write.csv(class_spec_counts, paste0("uniq_",bracket[n],".csv"), row.names = FALSE)
+  write.csv(pvp_talents_df, paste0("pvp_talents_df_",bracket[n],".csv"), row.names = FALSE)
   
 }
 total.time = start.time - Sys.time()
+print(total.time)
 # 
 # test = read_html(paste0("https://worldofwarcraft.com/en-us/game/pvp/leaderboards/",bracket[n])) %>%
 #   html_nodes(".Character")

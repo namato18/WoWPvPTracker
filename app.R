@@ -63,7 +63,30 @@ ui <- fluidPage(
                          br(),
                          plotOutput("plot4") %>% withSpinner()
                          
-                ))
+                ),
+                tabPanel("PvP Talents",
+                         selectInput("pvpClass","Select Class",
+                                     c("Death Knight" = "Death Knight",
+                                       "Demon Hunter" = "Demon Hunter",
+                                       "Druid" = "Druid",
+                                       "Hunter" = "Hunter",
+                                       "Mage" = "Mage",
+                                       "Monk" = "Monk",
+                                       "Paladin" = "Paladin",
+                                       "Priest" = "Priest",
+                                       "Rogue" = "Rogue",
+                                       "Shaman" = "Shaman",
+                                       "Warlock" = "Warlock",
+                                       "Warrior" = "Warrior")),
+                         plotOutput("pvpTalents1") %>% withSpinner(),
+                         plotOutput("pvpTalents2") %>% withSpinner(),
+                         plotOutput("pvpTalents3") %>% withSpinner(),
+                         plotOutput("pvpTalents4") %>% withSpinner()
+                         
+                  
+                  
+                )
+                )
   )
   
   
@@ -86,10 +109,20 @@ server <- function(input, output) {
     plot3 = NULL
     plot4 = NULL
     
+    pvpTalents1 = NULL
+    pvpTalents2 = NULL
+    pvpTalents3 = NULL
+    pvpTalents4 = NULL
+    
     assign("plot1",plot1,.GlobalEnv)
     assign("plot2",plot2,.GlobalEnv)
     assign("plot3",plot3,.GlobalEnv)
     assign("plot4",plot4,.GlobalEnv)
+    assign("pvpTalents1",pvpTalents1,.GlobalEnv)
+    assign("pvpTalents2",pvpTalents2,.GlobalEnv)
+    assign("pvpTalents3",pvpTalents3,.GlobalEnv)
+    assign("pvpTalents4",pvpTalents4,.GlobalEnv)
+    
     
     
     bracket = input$variable
@@ -98,20 +131,25 @@ server <- function(input, output) {
       uniq = read.csv("uniq_2v2.csv")
       important_df = read.csv("talents_df_2v2.csv")
       pie_df = read.csv("pie_df_2v2.csv")
+      pvp_talents_df = read.csv("pvp_talents_df_2v2.csv")
     }else if(bracket == "3v3"){
       uniq = read.csv("uniq_3v3.csv")
       important_df = read.csv("talents_df_3v3.csv")
       pie_df = read.csv("pie_df_3v3.csv")
+      pvp_talents_df = read.csv("pvp_talents_df_3v3.csv")
     }else if(bracket == "battlegrounds"){
       uniq = read.csv("uniq_rbg.csv")
       important_df = read.csv("talents_df_rbg.csv")
       pie_df = read.csv("pie_df_rbg.csv")
+      pvp_talents_df = read.csv("pvp_talents_df_rbg.csv")
     }
     
     specific_class = input$class
+    specific_class_pvp = input$pvpClass
     # specific_class = gsub(" ","",specific_class)
     print(specific_class)
     important_df = filter(important_df, Class == specific_class)
+    pvp_talents_df = filter(pvp_talents_df, Class == specific_class_pvp)
     
     
     #important_df$Talent.Level = rep(c(15,25,30,35,40,45,50), times = nrow(important_df)/7)
@@ -142,7 +180,9 @@ server <- function(input, output) {
     #   }
     # }
     assign("important_df",important_df, .GlobalEnv)
+    assign("pvp_talents_df",pvp_talents_df,.GlobalEnv)
     indi_specs = unique(important_df$Spec)
+    indi_pvp_specs = unique(pvp_talents_df$Spec)
     print(indi_specs)
     for(i in 1:length(indi_specs)){
       indi_df = filter(important_df, Spec == indi_specs[i])
@@ -158,6 +198,19 @@ server <- function(input, output) {
         theme(legend.position = "none")
       assign(paste0("plot",i),plot,.GlobalEnv)
     }
+    
+    for(i in 1:length(indi_pvp_specs)){
+      
+      indi_pvp_df = filter(pvp_talents_df, Spec == indi_pvp_specs[i])
+      
+      pvp_talents_plot = ggplot(indi_pvp_df, aes(x = PvP.Talent, fill = PvP.Talent)) + geom_bar(stat = "count", alpha = 0.5) +
+        ggtitle(label = paste0(indi_pvp_df$Spec[1]," ",indi_pvp_df$Class[1]," Talents ",bracket)) +
+        theme(legend.position = "none", axis.text.x = element_text(angle = 90))
+      assign(paste0("pvpTalents",i),pvp_talents_plot, .GlobalEnv)
+    }
+    
+    
+    
   }
   
   # Extract a list of all of the talents in the game
@@ -369,6 +422,7 @@ server <- function(input, output) {
       scale_fill_manual(values = c("blue1","red1"))
     
     
+    
     # print(num_hor)
     # print(num_ali)
     
@@ -403,6 +457,26 @@ server <- function(input, output) {
     }else{
       output$plot4 = NULL
     }
+    if(!is.null(pvpTalents1)){
+      output$pvpTalents1 = renderPlot(pvpTalents1)  
+    }else{
+      output$pvpTalents1 = NULL
+    }
+    if(!is.null(pvpTalents2)){
+      output$pvpTalents2 = renderPlot(pvpTalents2)  
+    }else{
+      output$pvpTalents2 = NULL
+    }
+    if(!is.null(pvpTalents3)){
+      output$pvpTalents3 = renderPlot(pvpTalents3)  
+    }else{
+      output$pvpTalents3 = NULL
+    }
+    if(!is.null(pvpTalents4)){
+      output$pvpTalents4 = renderPlot(pvpTalents4)  
+    }else{
+      output$pvpTalents4 = NULL
+    }
     
   })
   
@@ -431,6 +505,32 @@ server <- function(input, output) {
       output$plot4 = NULL
     }
     
+    
+  })
+  
+  observeEvent(input$pvpClass, {
+    MakeTalentsPlots()
+    
+    if(!is.null(pvpTalents1)){
+      output$pvpTalents1 = renderPlot(pvpTalents1)  
+    }else{
+      output$pvpTalents1 = NULL
+    }
+    if(!is.null(pvpTalents2)){
+      output$pvpTalents2 = renderPlot(pvpTalents2)  
+    }else{
+      output$pvpTalents2 = NULL
+    }
+    if(!is.null(pvpTalents3)){
+      output$pvpTalents3 = renderPlot(pvpTalents3)  
+    }else{
+      output$pvpTalents3 = NULL
+    }
+    if(!is.null(pvpTalents4)){
+      output$pvpTalents4 = renderPlot(pvpTalents4)  
+    }else{
+      output$pvpTalents4 = NULL
+    }
     
   })
   
