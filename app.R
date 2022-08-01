@@ -128,20 +128,20 @@ server <- function(input, output) {
     bracket = input$variable
     
     if(bracket == "2v2"){
-      uniq = read.csv("uniq_2v2.csv")
-      important_df = read.csv("talents_df_2v2.csv")
-      pie_df = read.csv("pie_df_2v2.csv")
-      pvp_talents_df = read.csv("pvp_talents_df_2v2.csv")
+      uniq = read.csv(paste0("uniq_2v2.",Sys.Date(),".csv"))
+      important_df = read.csv(paste0("talents_df_2v2.",Sys.Date(),".csv"))
+      pie_df = read.csv(paste0("pie_df_2v2.",Sys.Date(),".csv"))
+      pvp_talents_df = read.csv(paste0("pvp_talents_df_2v2.",Sys.Date(),".csv"))
     }else if(bracket == "3v3"){
-      uniq = read.csv("uniq_3v3.csv")
-      important_df = read.csv("talents_df_3v3.csv")
-      pie_df = read.csv("pie_df_3v3.csv")
-      pvp_talents_df = read.csv("pvp_talents_df_3v3.csv")
+      uniq = read.csv(paste0("uniq_3v3.",Sys.Date(),".csv"))
+      important_df = read.csv(paste0("talents_df_3v3.",Sys.Date(),".csv"))
+      pie_df = read.csv(paste0("pie_df_3v3.",Sys.Date(),".csv"))
+      pvp_talents_df = read.csv(paste0("pvp_talents_df_3v3.",Sys.Date(),".csv"))
     }else if(bracket == "battlegrounds"){
-      uniq = read.csv("uniq_rbg.csv")
-      important_df = read.csv("talents_df_rbg.csv")
-      pie_df = read.csv("pie_df_rbg.csv")
-      pvp_talents_df = read.csv("pvp_talents_df_rbg.csv")
+      uniq = read.csv(paste0("uniq_rbg.",Sys.Date(),".csv"))
+      important_df = read.csv(paste0("talents_df_rbg.",Sys.Date(),".csv"))
+      pie_df = read.csv(paste0("pie_df_rbg.",Sys.Date(),".csv"))
+      pvp_talents_df = read.csv(paste0("pvp_talents_df_rbg.",Sys.Date(),".csv"))
     }
     
     specific_class = input$class
@@ -193,16 +193,16 @@ server <- function(input, output) {
     bracket = input$variable
     
     if(bracket == "2v2"){
-      uniq = read.csv("uniq_2v2.csv")
+      uniq = read.csv(paste0("uniq_2v2.",Sys.Date(),".csv"))
       #important_df = read.csv("important_df_2v2.csv")
-      pie_df = read.csv("pie_df_2v2.csv")
+      pie_df = read.csv(paste0("pie_df_2v2.",Sys.Date(),".csv"))
     }else if(bracket == "3v3"){
-      uniq = read.csv("uniq_3v3.csv")
-      pie_df = read.csv("pie_df_3v3.csv")
+      uniq = read.csv(paste0("uniq_3v3.",Sys.Date(),".csv"))
+      pie_df = read.csv(paste0("pie_df_3v3.",Sys.Date(),".csv"))
       #important_df = read.csv("important_df_3v3.csv")
     }else if(bracket == "battlegrounds"){
-      uniq = read.csv("uniq_rbg.csv")
-      pie_df = read.csv("pie_df_rbg.csv")
+      uniq = read.csv(paste0("uniq_rbg.",Sys.Date(),".csv"))
+      pie_df = read.csv(paste0("pie_df_rbg.",Sys.Date(),".csv"))
       #important_df = read.csv("important_df_battlegrounds.csv")
     }
     

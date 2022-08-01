@@ -152,7 +152,11 @@ start.time = Sys.time()
 
 access_token = system("curl -u 6ab02cc1a1c140f0bd213d0b27e8c74c:VTrUzsJw0XDmKfJvM1QIXpn1QC1Hs96e -d grant_type=client_credentials https://us.battle.net/oauth/token",
                       intern = TRUE)
-access_token = jsonlite::fromJSON(access_token, flatten = TRUE)
+# For running on PC
+access_token = jsonlite::fromJSON(access_token[4], flatten = TRUE)
+
+# For running on MAC
+#access_token = jsonlite::fromJSON(access_token, flatten = TRUE)
 access_token = access_token$access_token
 
 ## USING WOW API
@@ -237,7 +241,7 @@ for(n in 1:3){
     class = possible_json(class, flatten = TRUE)
     talents_ = possible_json(talents, flatten = TRUE)
     
-    if(class == 'ERROR' | talents == 'ERROR'){
+    if(class == 'ERROR' | talents_ == 'ERROR'){
       next()
     }
     
@@ -249,7 +253,7 @@ for(n in 1:3){
     print(talents)
     print(pvp_talents)
     print(j)
-    if(length(talents) != 7 | length(pvp_talents) != 31){
+    if(length(talents) != 7 | length(pvp_talents) != 3){
       print('FOUND IT')
       next()
     }
@@ -295,10 +299,10 @@ for(n in 1:3){
     class_spec_counts$class[h] = strsplit(toString(class_spec_counts$Var1[h]), ".", fixed = TRUE)[[1]][2]
   }
   
-  write.csv(factions, paste0("pie_df_",bracket[n],".csv"), row.names = FALSE)
-  write.csv(talents_df, paste0("talents_df_",bracket[n],".csv"), row.names = FALSE)
-  write.csv(class_spec_counts, paste0("uniq_",bracket[n],".csv"), row.names = FALSE)
-  write.csv(pvp_talents_df, paste0("pvp_talents_df_",bracket[n],".csv"), row.names = FALSE)
+  write.csv(factions, paste0("pie_df_",bracket[n],".",Sys.Date(),".csv"), row.names = FALSE)
+  write.csv(talents_df, paste0("talents_df_",bracket[n],".",Sys.Date(),".csv"), row.names = FALSE)
+  write.csv(class_spec_counts, paste0("uniq_",bracket[n],".",Sys.Date(),".csv"), row.names = FALSE)
+  write.csv(pvp_talents_df, paste0("pvp_talents_df_",bracket[n],".",Sys.Date(),".csv"), row.names = FALSE)
   
 }
 total.time = start.time - Sys.time()
