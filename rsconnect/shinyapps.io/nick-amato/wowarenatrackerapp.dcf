@@ -5,7 +5,7 @@ account: nick-amato
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5801480
-bundleId: 6130321
+bundleId: 6154670
 url: https://nick-amato.shinyapps.io/wowarenatrackerapp/
-when: 1658753770.354
-lastSyncTime: 1658753770.35402
+when: 1659380337.63154
+lastSyncTime: 1659380337.63154
