@@ -146,39 +146,10 @@ server <- function(input, output) {
     
     specific_class = input$class
     specific_class_pvp = input$pvpClass
-    # specific_class = gsub(" ","",specific_class)
     print(specific_class)
     important_df = filter(important_df, Class == specific_class)
     pvp_talents_df = filter(pvp_talents_df, Class == specific_class_pvp)
-    
-    
-    #important_df$Talent.Level = rep(c(15,25,30,35,40,45,50), times = nrow(important_df)/7)
-    
-    # if(nrow(important_df > 0)){
-    #   for(i in 1:nrow(important_df)){
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[1:3,]))){
-    #       important_df$Talent.Level[i] = 15
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[4:6,]))){
-    #       important_df$Talent.Level[i] = 25
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[7:9,]))){
-    #       important_df$Talent.Level[i] = 30
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[10:12,]))){
-    #       important_df$Talent.Level[i] = 35
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[13:15,]))){
-    #       important_df$Talent.Level[i] = 40
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[16:18,]))){
-    #       important_df$Talent.Level[i] = 45
-    #     }
-    #     if(any(grepl(important_df$Talent[i], specific_talents_df[19:21,]))){
-    #       important_df$Talent.Level[i] = 50
-    #     }
-    #   }
-    # }
+   
     assign("important_df",important_df, .GlobalEnv)
     assign("pvp_talents_df",pvp_talents_df,.GlobalEnv)
     indi_specs = unique(important_df$Spec)
@@ -213,147 +184,6 @@ server <- function(input, output) {
     
   }
   
-  # Extract a list of all of the talents in the game
-  # talent_extract = read_html("https://worldofwarcraft.com/en-us/game/talent-calculator#death-knight/blood") %>%
-  #   html_nodes(".Talent")
-  # talent_extract = html_text(talent_extract)
-  # test_text_extract = str_extract(talent_extract, "(.*?)\\(")
-  # test_text_extract = str_replace(test_text_extract, "\\(", "")
-  # test_text_extract = test_text_extract[-1]
-  # test_text_extract = test_text_extract[!is.na(test_text_extract)]
-  
-  ## Need to create a data.frame of all classes with their specs/talents
-  
-  # Blood_DeathKnight_Talents = c(test_text_extract[1:21])
-  # Frost_DeathKnight_Talents = c(test_text_extract[22:42])
-  # Unholy_DeathKnight_Talents = c(test_text_extract[43:63])
-  # 
-  # Havoc_DemonHunter_Talents = c(test_text_extract[64:84])
-  # Vengeance_DemonHunter_Talents = c(test_text_extract[85:105])
-  # 
-  # Balance_Druid_Talents = c(test_text_extract[106:126])
-  # Feral_Druid_Talents = c(test_text_extract[127:147])
-  # Guardian_Druid_Talents = c(test_text_extract[148:168])
-  # Restoration_Druid_Talents = c(test_text_extract[169:189])
-  # 
-  # BeastMastery_Hunter_Talents = c(test_text_extract[190:210])
-  # Marksman_Hunter_Talents = c(test_text_extract[211:231])
-  # Survival_Hunter_Talents = c(test_text_extract[232:252])
-  # 
-  # Arcane_Mage_Talents = c(test_text_extract[253:273])
-  # Fire_Mage_Talents = c(test_text_extract[274:294])
-  # Frost_Mage_Talents = c(test_text_extract[295:315])
-  # 
-  # Brewmaster_Monk_Talents = c(test_text_extract[316:336])
-  # Mistweaver_Monk_Talents = c(test_text_extract[337:357])
-  # Windwalker_Monk_Talents = c(test_text_extract[358:378])
-  # 
-  # Holy_Paladin_Talents = c(test_text_extract[379:399])
-  # Protection_Paladin_Talents= c(test_text_extract[400:420])
-  # Retribution_Paladin_Talents = c(test_text_extract[421:441])
-  # 
-  # Discipline_Priest_Talents = c(test_text_extract[442:462])
-  # Holy_Priest_Talents = c(test_text_extract[463:483])
-  # Shadow_Priest_Talents = c(test_text_extract[484:504])
-  # 
-  # Assassination_Rogue_Talents = c(test_text_extract[505:525])
-  # Outlaw_Rogue_Talents = c(test_text_extract[526:546])
-  # Subtlety_Rogue_Talents = c(test_text_extract[547:567])
-  # 
-  # Elemental_Shaman_Talents = c(test_text_extract[568:588])
-  # Enhancement_Shaman_Talents = c(test_text_extract[589:609])
-  # Restoration_Shaman_Talents = c(test_text_extract[610:630])
-  # 
-  # Affliction_Warlock_Talents = c(test_text_extract[631:651])
-  # Demonology_Warlock_Talents = c(test_text_extract[652:672])
-  # Destruction_Warlock_Talents = c(test_text_extract[673:693])
-  # 
-  # Arms_Warrior_Talents = c(test_text_extract[694:714])
-  # Fury_Warrior_Talents = c(test_text_extract[715:735])
-  # Protection_Warrior_Talents = c(test_text_extract[736:756])
-  
-  
-  specs_df = data.frame("DeathKnight" = c("Blood","Frost","Unholy","Blood",NA),
-                        "DemonHunter" = c("Havoc","Vengeance","Havoc",NA,NA),
-                        "Druid" = c("Balance", "Feral", "Guardian","Restoration", "Balance"),
-                        "Hunter" = c("Beast Mastery", "Marksmanship", "Survival", "Beast Mastery",NA),
-                        "Mage" = c("Arcane","Fire","Frost","Arcane",NA),
-                        "Monk" = c("Brewmaster","Windwalker","Mistweaver","Brewmaster",NA),
-                        "Paladin" = c("Holy","Protection","Retribution","Holy",NA),
-                        "Priest" = c("Discipline","Holy","Shadow","Discipline",NA),
-                        "Rogue" = c("Assassination","Outlaw","Subtlety","Assassination",NA),
-                        "Shaman" = c("Elemental","Enhancement","Restoration","Elemental",NA),
-                        "Warlock" = c("Affliction","Demonology","Destruction","Affliction",NA),
-                        "Warrior" = c("Arms","Fury","Protection","Arms",NA)
-  )
-  
-  # 
-  # talents_df = data.frame("Survival Hunter" = Survival_Hunter_Talents,
-  #                         "Marksmanship Hunter" = Marksman_Hunter_Talents,
-  #                         "Beast Mastery Hunter" = BeastMastery_Hunter_Talents,
-  #                         "Blood Death Knight" = Blood_DeathKnight_Talents,
-  #                         "Frost Death Knight" = Frost_DeathKnight_Talents,
-  #                         "Unholy Death Knight" = Unholy_DeathKnight_Talents,
-  #                         "Havoc Demon Hunter" = Havoc_DemonHunter_Talents,
-  #                         "Vengeance Demon Hunter" = Vengeance_DemonHunter_Talents,
-  #                         "Guardian Druid" = Guardian_Druid_Talents,
-  #                         "Balance Druid" = Balance_Druid_Talents,
-  #                         "Restoration Druid" = Restoration_Druid_Talents,
-  #                         "Feral Druid" = Feral_Druid_Talents,
-  #                         "Frost Mage" = Frost_Mage_Talents,
-  #                         "Fire Mage" = Fire_Mage_Talents,
-  #                         "Arcane Mage" = Arcane_Mage_Talents,
-  #                         "Mistweaver Monk" = Mistweaver_Monk_Talents,
-  #                         "Brewmaster Monk" = Brewmaster_Monk_Talents,
-  #                         "Windwalker Monk" = Windwalker_Monk_Talents,
-  #                         "Holy Paladin" = Holy_Paladin_Talents,
-  #                         "Protection Paladin" = Protection_Paladin_Talents,
-  #                         "Retribution Paladin" = Retribution_Paladin_Talents,
-  #                         "Holy Priest" = Holy_Priest_Talents,
-  #                         "Shadow Priest" = Shadow_Priest_Talents,
-  #                         "Discipline Priest" = Discipline_Priest_Talents,
-  #                         "Subtlety Rogue" = Subtlety_Rogue_Talents,
-  #                         "Assassination Rogue" = Assassination_Rogue_Talents,
-  #                         "Outlaw Rogue" = Outlaw_Rogue_Talents,
-  #                         "Restoration Shaman" = Restoration_Shaman_Talents,
-  #                         "Elemental Shaman" = Elemental_Shaman_Talents,
-  #                         "Enhancement Shaman" = Enhancement_Shaman_Talents,
-  #                         "Destruction Warlock" = Destruction_Warlock_Talents,
-  #                         "Affliction Warlock" = Affliction_Warlock_Talents,
-  #                         "Demonology Warlock" = Demonology_Warlock_Talents,
-  #                         "Arms Warrior" = Arms_Warrior_Talents,
-  #                         "Fury Warrior" = Fury_Warrior_Talents,
-  #                         "Protection Warrior" = Protection_Warrior_Talents
-  # )
-  
-  
-  specs_df = data.frame("DeathKnight" = c("Blood","Frost","Unholy","Blood",NA),
-                        "DemonHunter" = c("Havoc","Vengeance","Havoc",NA,NA),
-                        "Druid" = c("Balance", "Feral", "Guardian","Restoration", "Balance"),
-                        "Hunter" = c("Beast Mastery", "Marksmanship", "Survival", "Beast Mastery",NA),
-                        "Mage" = c("Arcane","Fire","Frost","Arcane",NA),
-                        "Monk" = c("Brewmaster","Mistweaver","Windwalker","Brewmaster",NA),
-                        "Paladin" = c("Holy","Protection","Retribution","Holy",NA),
-                        "Priest" = c("Discipline","Holy","Shadow","Discipline",NA),
-                        "Rogue" = c("Assassination","Outlaw","Subtlety","Assassination",NA),
-                        "Shaman" = c("Elemental","Enhancement","Restoration","Elemental",NA),
-                        "Warlock" = c("Affliction","Demonology","Destruction","Affliction",NA),
-                        "Warrior" = c("Arms","Fury","Protection","Arms",NA)
-                        
-  )
-  specs = c("Fury","Arms","Protection", "Retribution", "Holy", "Elemental", "Restoration", "Enhancement",
-            "Feral", "Guardian","Balance", "Beast Mastery", "Survival", "Marksmanship","Shadow","Discipline",
-            "Assassination","Subtlety","Outlaw","Frost","Fire","Arcane","Brewmaster","Windwalker","Mistweaver",
-            "Blood","Unholy","Havoc","Vengeance","Affliction","Demonology","Destruction")
-  classes = c("Warrior", "Paladin", "Shaman","Druid","Hunter", "Priest","Rogue","Mage","Monk","Death Knight", 
-              "Warlock", "Demon Hunter")
-  spec_class = c("Fury Warrior", "Arms Warrior", "Protection Warrior", "Protection Paladin", "Retribution Paladin",
-                 "Holy Paladin", "Elemental Shaman", "Restoration Shaman", "Enhancement Shaman", "Feral Druid",
-                 "Guardian Druid", "Balance Druid", "Restoration Druid", "Beast Mastery Hunter", "Survival Hunter",
-                 "Marksmanship Hunter", "Shadow Priest", "Discipline Priest", "Holy Priest", "Assassination Rogue",
-                 "Subtlety Rogue", "Outlaw Rogue", "Frost Mage", "Fire Mage", "Arcane Mage", "Brewmaster Monk",
-                 "Windwalker Monk", "Mistweaver Monk", "Blood Death Knight","Unholy Death Knight", "Frost Death Knight",
-                 "Havoc Demon Hunter", "Vengeance Demon Hunter", "Affliction Warlock", "Demonology Warlock", "Destruction Warlock")
   
   observeEvent(input$variable, {
     output$plot = NULL
@@ -420,19 +250,7 @@ server <- function(input, output) {
       coord_polar("y", start = 0) +
       ggtitle(label = paste0("Horde and Alliance population comparison for the ", input$variable, " bracket")) +
       scale_fill_manual(values = c("blue1","red1"))
-    
-    
-    
-    # print(num_hor)
-    # print(num_ali)
-    
-    ## ASSIGN SUDO GLOBALS
-    # assign("char_server",char_server,.GlobalEnv)
-    # assign("char_name",char_name,.GlobalEnv)
-    # assign("classes_vec",classes_vec,.GlobalEnv)
-    # assign("spec_vec",spec_vec,.GlobalEnv)
-    # assign("spec_class_vec",spec_class_vec,.GlobalEnv)
-    # assign("specs_df",specs_df,.GlobalEnv)
+
     
     MakeTalentsPlots()
     
