@@ -22,15 +22,20 @@ ui <- fluidPage(
                   "Rated BGs" = "battlegrounds")),
     strong("About:"),
     br(),
-    ("This app simply displays the top 1000 2v2, 3v3 and rated battlegrounds players depending on
+    ("This app simply displays the top 5000 2v2, 3v3 and rated battlegrounds players depending on
      which bracket you select using the drop down menu!"),
     br(),
     br(),
     
     strong("How it Works:"),
     br(),
-    ("This app scrapes data directly from the World of Warcraft website allowing for an accurate representation of the top 1000 players.
-     The data is updated once each day!")
+    ("This app scrapes data directly from the World of Warcraft website allowing for an accurate representation of the current top players.
+     The data is updated once each day!"),
+    br(),
+    br(),
+    strong("Tabs:"),
+    br(),
+    ("Navigate through the tabs to view specific data such as class talents and pvp talents.")
     ),
   
   mainPanel(
@@ -100,6 +105,40 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   
+  # We want to find the names of the .csv files
+  working_dir = getwd()
+  all_files = list.files(path = working_dir, pattern = '.csv')
+  file_info = file.info(list.files(path = working_dir, pattern = '.csv'))
+  
+  
+  uniq_2v2 = all_files[grep("uniq_2v2",all_files)]
+  uniq_2v2 = uniq_2v2[which.max(file.info(uniq_2v2)$mtime)]
+  uniq_3v3 = all_files[grep("uniq_3v3",all_files)]
+  uniq_3v3 = uniq_3v3[which.max(file.info(uniq_3v3)$mtime)]
+  uniq_rbg = all_files[grep("uniq_rbg",all_files)]
+  uniq_rbg = uniq_rbg[which.max(file.info(uniq_rbg)$mtime)]
+  talents_dfs = all_files[word(all_files,1,sep = "_") == "talents"]
+  talents_df_2v2 = talents_dfs[grep("talents_df_2v2",talents_dfs)]
+  talents_df_2v2 = talents_df_2v2[which.max(file.info(talents_df_2v2)$mtime)]
+  talents_df_3v3 = talents_dfs[grep("talents_df_3v3",talents_dfs)]
+  talents_df_3v3 = talents_df_3v3[which.max(file.info(talents_df_3v3)$mtime)]
+  talents_df_rbg = talents_dfs[grep("talents_df_rbg",talents_dfs)]
+  talents_df_rbg = talents_df_rbg[which.max(file.info(talents_df_rbg)$mtime)]
+  pie_df_2v2 = all_files[grep("pie_df_2v2",all_files)]
+  pie_df_2v2 = pie_df_2v2[which.max(file.info(pie_df_2v2)$mtime)]
+  pie_df_3v3 = all_files[grep("pie_df_3v3",all_files)]
+  pie_df_3v3 = pie_df_3v3[which.max(file.info(pie_df_3v3)$mtime)]
+  pie_df_rbg = all_files[grep("pie_df_rbg",all_files)]
+  pie_df_rbg = pie_df_rbg[which.max(file.info(pie_df_rbg)$mtime)]
+  pvp_talents_df_2v2 = all_files[grep("pvp_talents_df_2v2",all_files)]
+  pvp_talents_df_2v2 = pvp_talents_df_2v2[which.max(file.info(pvp_talents_df_2v2)$mtime)]
+  pvp_talents_df_3v3 = all_files[grep("pvp_talents_df_3v3",all_files)]
+  pvp_talents_df_3v3 = pvp_talents_df_3v3[which.max(file.info(pvp_talents_df_3v3)$mtime)]
+  pvp_talents_df_rbg = all_files[grep("pvp_talents_df_rbg",all_files)]
+  pvp_talents_df_rbg = pvp_talents_df_rbg[which.max(file.info(pvp_talents_df_rbg)$mtime)]
+  
+  
+  
   current_environment = environment()
   
   MakeTalentsPlots = function(){
@@ -128,25 +167,27 @@ server <- function(input, output) {
     bracket = input$variable
     
     if(bracket == "2v2"){
-      uniq = read.csv(paste0("uniq_2v2.",Sys.Date(),".csv"))
-      important_df = read.csv(paste0("talents_df_2v2.",Sys.Date(),".csv"))
-      pie_df = read.csv(paste0("pie_df_2v2.",Sys.Date(),".csv"))
-      pvp_talents_df = read.csv(paste0("pvp_talents_df_2v2.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_2v2)
+      important_df = read.csv(talents_df_2v2)
+      pie_df = read.csv(pie_df_2v2)
+      pvp_talents_df = read.csv(pvp_talents_df_2v2)
     }else if(bracket == "3v3"){
-      uniq = read.csv(paste0("uniq_3v3.",Sys.Date(),".csv"))
-      important_df = read.csv(paste0("talents_df_3v3.",Sys.Date(),".csv"))
-      pie_df = read.csv(paste0("pie_df_3v3.",Sys.Date(),".csv"))
-      pvp_talents_df = read.csv(paste0("pvp_talents_df_3v3.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_3v3)
+      important_df = read.csv(talents_df_3v3)
+      pie_df = read.csv(pie_df_3v3)
+      pvp_talents_df = read.csv(pvp_talents_df_3v3)
     }else if(bracket == "battlegrounds"){
-      uniq = read.csv(paste0("uniq_rbg.",Sys.Date(),".csv"))
-      important_df = read.csv(paste0("talents_df_rbg.",Sys.Date(),".csv"))
-      pie_df = read.csv(paste0("pie_df_rbg.",Sys.Date(),".csv"))
-      pvp_talents_df = read.csv(paste0("pvp_talents_df_rbg.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_rbg)
+      important_df = read.csv(talents_df_rbg)
+      pie_df = read.csv(pie_df_rbg)
+      pvp_talents_df = read.csv(pvp_talents_df_rbg)
     }
     
     specific_class = input$class
     specific_class_pvp = input$pvpClass
     print(specific_class)
+    
+    
     important_df = filter(important_df, Class == specific_class)
     pvp_talents_df = filter(pvp_talents_df, Class == specific_class_pvp)
    
@@ -155,6 +196,7 @@ server <- function(input, output) {
     indi_specs = unique(important_df$Spec)
     indi_pvp_specs = unique(pvp_talents_df$Spec)
     print(indi_specs)
+    
     for(i in 1:length(indi_specs)){
       indi_df = filter(important_df, Spec == indi_specs[i])
       indi_df$Talent = as.factor(indi_df$Talent)
@@ -193,16 +235,16 @@ server <- function(input, output) {
     bracket = input$variable
     
     if(bracket == "2v2"){
-      uniq = read.csv(paste0("uniq_2v2.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_2v2)
       #important_df = read.csv("important_df_2v2.csv")
-      pie_df = read.csv(paste0("pie_df_2v2.",Sys.Date(),".csv"))
+      pie_df = read.csv(pie_df_2v2)
     }else if(bracket == "3v3"){
-      uniq = read.csv(paste0("uniq_3v3.",Sys.Date(),".csv"))
-      pie_df = read.csv(paste0("pie_df_3v3.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_3v3)
+      pie_df = read.csv(pie_df_3v3)
       #important_df = read.csv("important_df_3v3.csv")
     }else if(bracket == "battlegrounds"){
-      uniq = read.csv(paste0("uniq_rbg.",Sys.Date(),".csv"))
-      pie_df = read.csv(paste0("pie_df_rbg.",Sys.Date(),".csv"))
+      uniq = read.csv(uniq_rbg)
+      pie_df = read.csv(pie_df_rbg)
       #important_df = read.csv("important_df_battlegrounds.csv")
     }
     
